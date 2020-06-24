@@ -1,3 +1,33 @@
+class Card:
+
+    def __init__(self):
+        self.move = []
+
+
+    def __str__(self):
+        return self.display()
+
+    def display(self):
+        output = ''
+        for i in range(-2,3):
+            for j in range(-2,3):
+                if (i,j) in self.move:
+                    output = output + 'x|'
+                elif (i,j) == (0,0):
+                    output = output + 'o|'
+                else:
+                    output = output + '~|'
+
+            output = output[:-1] + '\n'
+
+        return output
+
+class Crab(Card):
+
+    def __init__(self):
+        self.move = [(-2,-2), (1,2)]
+
+
 class Piece:
 
     def __init__(self, owner):
@@ -43,6 +73,11 @@ class Game:
             print(output)
 
     def play_move(self, orig_loc, delta):
+        '''
+        example: self.play_move([0,2],[1,1])
+
+        '''
+
         orig_loc_x = orig_loc[0]
         orig_loc_y = orig_loc[1]
         d_x = delta[0]
@@ -52,8 +87,10 @@ class Game:
         self.board[orig_loc_x + d_x][orig_loc_y + d_y] = unit
 
 
-a = Game()
+# a = Game()
 
-a.play_move([0,2],[1,1])
-a.display()
+# a.play_move([0,2],[1,1])
+# a.display()
 
+a = Crab()
+print(a)
