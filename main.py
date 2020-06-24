@@ -22,12 +22,15 @@ class Player:
 class Game:
 
     def __init__(self):
+        # set up players
         self.l_player = Player('L')
         self.r_player = Player('R')
+        # set up board
         left_row = [Pawn(self.l_player) if i !=2 else Master(self.l_player) for i in range(5)]
         right_row = [Pawn(self.r_player) if i !=2 else Master(self.r_player) for i in range(5)]
-        none_row = [None for i in range(5)]
-        self.board = [left_row, none_row, none_row, none_row, right_row]
+        self.board = [left_row, [], [], [], right_row]
+        for i in range(1,4):
+            self.board[i] = [None for j in range(5)]
 
     def display(self):
         for j in self.board:
@@ -39,7 +42,18 @@ class Game:
                     output = output + i.__str__()
             print(output)
 
+    def play_move(self, orig_loc, delta):
+        orig_loc_x = orig_loc[0]
+        orig_loc_y = orig_loc[1]
+        d_x = delta[0]
+        d_y = delta[1]
+        unit = self.board[orig_loc_x][orig_loc_y]
+        self.board[orig_loc_x][orig_loc_y] = None
+        self.board[orig_loc_x + d_x][orig_loc_y + d_y] = unit
+
 
 a = Game()
+
+a.play_move([0,2],[1,1])
 a.display()
 
