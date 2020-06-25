@@ -1,7 +1,8 @@
 class Card:
 
     def __init__(self):
-        self.move = []
+        self.move_list = []
+        self.move = {}
 
 
     def __str__(self):
@@ -9,14 +10,11 @@ class Card:
 
     def display(self):
         output = ''
+        move_dict = {x:str(i) for i,x in enumerate(self.move_list,1)}
+        move_dict[(0,0)] = 'o'
         for i in range(-2,3):
             for j in range(-2,3):
-                if (i,j) in self.move:
-                    output = output + 'x|'
-                elif (i,j) == (0,0):
-                    output = output + 'o|'
-                else:
-                    output = output + '~|'
+                output = output + move_dict.get((i,j),'~')+'|'
 
             output = output[:-1] + '\n'
 
@@ -25,7 +23,8 @@ class Card:
 class Crab(Card):
 
     def __init__(self):
-        self.move = [(-2,-2), (1,2)]
+        self.move_list = [(-2,-2), (1,2)]
+        self.move = {i:x for i,x in enumerate(self.move_list,1)}
 
 
 class Piece:
@@ -72,9 +71,18 @@ class Game:
                     output = output + i.__str__()
             print(output)
 
-    def play_move(self, orig_loc, delta):
+    def play_card(self, orig_loc, card, action):
+        '''Example:
+        c = Crab()
+        a.play_card([0,2],c,2)
         '''
-        example: self.play_move([0,2],[1,1])
+        delta = card.move[action]
+        self.move_piece(orig_loc, delta)
+
+
+    def move_piece(self, orig_loc, delta):
+        '''
+        example: self.move_piece([0,2],[1,1])
 
         '''
 
@@ -87,10 +95,11 @@ class Game:
         self.board[orig_loc_x + d_x][orig_loc_y + d_y] = unit
 
 
-# a = Game()
-
+a = Game()
+c = Crab()
+a.play_card([0,2],c,2)
 # a.play_move([0,2],[1,1])
-# a.display()
+a.display()
 
-a = Crab()
-print(a)
+# a = Crab()
+# print(a)
