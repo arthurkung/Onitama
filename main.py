@@ -1,32 +1,4 @@
-class Card:
-
-    def __init__(self):
-        self.move_list = []
-        self.move = {}
-
-
-    def __str__(self):
-        return self.display()
-
-    def display(self):
-        output = ''
-        move_dict = {x:str(i) for i,x in enumerate(self.move_list,1)}
-        move_dict[(0,0)] = 'o'
-        for i in range(-2,3):
-            for j in range(-2,3):
-                output = output + move_dict.get((i,j),'~')+'|'
-
-            output = output[:-1] + '\n'
-
-        return output
-
-class Crab(Card):
-
-    def __init__(self):
-        self.move_list = [(-2,-2), (1,2)]
-        self.move = {i:x for i,x in enumerate(self.move_list,1)}
-
-
+from cards import Lamb, Crab
 class Piece:
 
     def __init__(self, owner):
@@ -47,6 +19,17 @@ class Player:
 
     def __init__(self, name):
         self.name = name
+        self.card_list = []
+
+    def get_card(self, card):
+        self.card_list.append(card)
+
+    def remove_card(self, card):
+        self.card_list.remove(card)
+
+    def show_cards(self):
+        for c in self.card_list:
+            print(c)
 
 class Game:
 
@@ -60,6 +43,10 @@ class Game:
         self.board = [left_row, [], [], [], right_row]
         for i in range(1,4):
             self.board[i] = [None for j in range(5)]
+        #set up card
+        self.l_player.get_card(Lamb(1))
+        self.l_player.get_card(Crab(1))
+        self.r_player.get_card(Lamb(-1))
 
     def display(self):
         for j in self.board:
@@ -96,10 +83,10 @@ class Game:
 
 
 a = Game()
-c = Crab()
-a.play_card([0,2],c,2)
+# c = Crab()
+# a.play_card([0,2],c,2)
 # a.play_move([0,2],[1,1])
-a.display()
+# a.display()
 
-# a = Crab()
-# print(a)
+
+a.l_player.show_cards()
