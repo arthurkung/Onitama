@@ -39,6 +39,8 @@ class Board:
         middle_loc = round(size/2)
         l_x = 0
         r_x = size - 1
+        l_player.win_loc = (r_x,middle_loc)
+        r_player.win_loc = (l_x,middle_loc)
         for y in range(size):
             if y == middle_loc:
                 self.piece_dict[(r_x,y)]=Master(r_player)
@@ -134,11 +136,31 @@ class Game:
         self.board.piece_dict.pop(orig_loc)
         self.board.piece_dict[target_loc] = unit
 
+    def check_winning_condition(self, player):
+        win = self.master_reached_win_loc(player) or not self.master_is_alive(player)
+        return win
+
+    def master_reached_win_loc(self,player):
+        winning_loc_unit = self.board.get_piece(player.win_loc)
+        if isinstance(winning_loc_unit,Master):
+            if winning_loc_unit.owner == self.l_player:
+                return True
+        return False
+
+    def master_is_alive(self,player):
+        for piece in self.board.piece_dict.values():
+            if piece.owner==player and isinstance(piece,Master):
+                return True
+        return False
+
+
 
 a = Game()
 
 a.play_card(a.l_player,a.r_player,(0,2),a.l_player.card_list[1],2)
 # print(a.board.piece_dict)
 a.board.display()
+
+print(a.check_winning_condition())
 # a.r_player.show_cards()
 
