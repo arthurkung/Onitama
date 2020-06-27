@@ -17,8 +17,9 @@ class Pawn(Piece):
 
 class Player:
 
-    def __init__(self, name):
+    def __init__(self, name, orientation):
         self.name = name
+        self.orientation = orientation
         self.card_list = []
 
     def get_card(self, card):
@@ -35,8 +36,8 @@ class Game:
 
     def __init__(self):
         # set up players
-        self.l_player = Player('L')
-        self.r_player = Player('R')
+        self.l_player = Player('L',1)
+        self.r_player = Player('R',-1)
         # set up board
         left_row = [Pawn(self.l_player) if i !=2 else Master(self.l_player) for i in range(5)]
         right_row = [Pawn(self.r_player) if i !=2 else Master(self.r_player) for i in range(5)]
@@ -48,7 +49,7 @@ class Game:
         self.l_player.get_card(Crab(1))
         self.r_player.get_card(Lamb(-1))
 
-    def display(self):
+    def display_board(self):
         for j in self.board:
             output = ''
             for i in j:
@@ -58,14 +59,18 @@ class Game:
                     output = output + i.__str__()
             print(output)
 
-    def play_card(self, orig_loc, card, action):
+    def play_card(self, player, player_opp, orig_loc, card, action):
         '''Example:
         c = Crab()
-        a.play_card([0,2],c,2)
+        game1.play_card(game1.l_player,game1.r_player,[0,2],c,2)
         '''
+
+
         delta = card.move[action]
         self.move_piece(orig_loc, delta)
-
+        player.remove_card(card)
+        card.set_orientation(player_opp.orientation)
+        player_opp.get_card(card)
 
     def move_piece(self, orig_loc, delta):
         '''
@@ -82,11 +87,8 @@ class Game:
         self.board[orig_loc_x + d_x][orig_loc_y + d_y] = unit
 
 
-a = Game()
-# c = Crab()
-# a.play_card([0,2],c,2)
-# a.play_move([0,2],[1,1])
-# a.display()
+# a = Game()
+# a.play_card(a.l_player,a.r_player,(0,2),a.l_player.card_list[1],2)
+# a.display_board()
+# a.r_player.show_cards()
 
-
-a.l_player.show_cards()
