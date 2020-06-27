@@ -100,6 +100,8 @@ class Game:
             print(check)
             return 0
         self.move_piece(orig_loc, delta)
+        if self.check_winning_condition(player,player_opp):
+            print('Player {} has won the game'.format(player.name))
         player.remove_card(card)
         card.set_orientation(player_opp.orientation)
         player_opp.get_card(card)
@@ -136,8 +138,8 @@ class Game:
         self.board.piece_dict.pop(orig_loc)
         self.board.piece_dict[target_loc] = unit
 
-    def check_winning_condition(self, player):
-        win = self.master_reached_win_loc(player) or not self.master_is_alive(player)
+    def check_winning_condition(self, player, player_opp):
+        win = self.master_reached_win_loc(player) or not self.master_is_alive(player_opp)
         return win
 
     def master_reached_win_loc(self,player):
