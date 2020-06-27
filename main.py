@@ -149,7 +149,7 @@ class Game:
     def master_reached_win_loc(self,player):
         winning_loc_unit = self.board.get_piece(player.win_loc)
         if isinstance(winning_loc_unit,Master):
-            if winning_loc_unit.owner == self.l_player:
+            if winning_loc_unit.owner == player:
                 return True
         return False
 
