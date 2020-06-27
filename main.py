@@ -92,7 +92,10 @@ class Game:
         game1.play_card(game1.l_player,game1.r_player,[0,2],c,2)
         '''
         delta = card.move[action]
-        check = self.check_move_logic(player, orig_loc, card, delta)
+        orig_loc_x,orig_loc_y = orig_loc
+        d_x,d_y = delta
+        target_loc = (orig_loc_x + d_x,orig_loc_y + d_y)
+        check = self.check_move_logic(player, orig_loc, card, target_loc)
         if check != 1:
             print(check)
             return 0
@@ -101,13 +104,10 @@ class Game:
         card.set_orientation(player_opp.orientation)
         player_opp.get_card(card)
 
-    def check_move_logic(self,player,orig_loc,card,delta):
+    def check_move_logic(self,player,orig_loc,card,target_loc):
         if card not in player.card_list:
             return 'card not in card list'
 
-        orig_loc_x,orig_loc_y = orig_loc
-        d_x,d_y = delta
-        target_loc = (orig_loc_x + d_x,orig_loc_y + d_y)
         unit = self.board.get_piece(orig_loc)
         if unit is None:
             return 'no unit at location'
