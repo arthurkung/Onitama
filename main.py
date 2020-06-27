@@ -1,4 +1,4 @@
-from cards import Lamb, Crab
+from cards import *
 class Piece:
 
     def __init__(self, owner):
@@ -90,11 +90,15 @@ class Game:
                 player.get_card(card)
 
 
-    def play_card(self, player, player_opp, orig_loc, card, action):
+    def play_card(self, player, player_opp, orig_loc, card_name, action):
         '''Example:
         c = Crab()
         game1.play_card(game1.l_player,game1.r_player,[0,2],c,2)
         '''
+
+        dummy_card = Card(name = card_name)
+        card_index = player.card_list.index(dummy_card)
+        card = player.card_list[card_index]
         delta = card.move[action]
         orig_loc_x,orig_loc_y = orig_loc
         d_x,d_y = delta
@@ -167,7 +171,7 @@ r_player_card_list = [Lamb()]
 card_dict = {a.l_player:l_player_card_list,a.r_player:r_player_card_list}
 a.distribute_cards(card_dict)
 
-a.play_card(a.l_player,a.r_player,(0,2),a.l_player.card_list[1],2)
+a.play_card(a.l_player,a.r_player,(0,2),'Crab',2)
 # print(a.board.piece_dict)
 a.board.display()
 

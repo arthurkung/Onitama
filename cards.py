@@ -1,9 +1,18 @@
 class Card:
+    set_orientation = 1
     action_list = []
     name = 'empty card'
-    def __init__(self,orientation=1):
-        self.set_orientation(orientation)
 
+    def __init__(self,orientation=1, name = None, action_list = None):
+        self.set_orientation(orientation)
+        if not name is None:
+            self.name = name
+        if not action_list is None:
+            self.action_list = action_list
+
+
+    def __eq__(self,other):
+        return self.name == other.name
 
     def __str__(self):
         return self.display()
