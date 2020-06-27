@@ -1,7 +1,7 @@
 class Card:
     action_list = []
     name = 'empty card'
-    def __init__(self,orientation):
+    def __init__(self,orientation=1):
         self.set_orientation(orientation)
 
 

@@ -81,9 +81,13 @@ class Game:
         # set up board
         self.board = Board(5,self.l_player,self.r_player)
         #set up card
-        self.l_player.get_card(Lamb(1))
-        self.l_player.get_card(Crab(1))
-        self.r_player.get_card(Lamb(-1))
+        self.distribute_cards({})
+
+    def distribute_cards(self,card_list_mapping):
+        for player, card_list in card_list_mapping.items():
+            for card in card_list:
+                card.set_orientation(player.orientation)
+                player.get_card(card)
 
 
     def play_card(self, player, player_opp, orig_loc, card, action):
@@ -158,11 +162,15 @@ class Game:
 
 
 a = Game()
+l_player_card_list = [Lamb(),Crab()]
+r_player_card_list = [Lamb()]
+card_dict = {a.l_player:l_player_card_list,a.r_player:r_player_card_list}
+a.distribute_cards(card_dict)
 
 a.play_card(a.l_player,a.r_player,(0,2),a.l_player.card_list[1],2)
 # print(a.board.piece_dict)
 a.board.display()
 
-print(a.check_winning_condition())
 # a.r_player.show_cards()
+
 
