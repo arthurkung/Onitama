@@ -45,7 +45,7 @@ class Card:
 class Crab(Card):
 
     name = 'Crab'
-    action_list = [(-2,-2), (1,2)]
+    action_list = [(0,-2), (1,0), (0,2)]
 
 
 
@@ -53,4 +53,35 @@ class Lamb(Card):
 
     name = 'Lamb'
     action_list = [(-1,0), (1,1)]
+
+
+class Card_all_dir(Card):
+
+    name = 'Card_all_dir'
+    action_list = [(-1,0), (1,0),(0,-1),(0,1)]
+
+
+class Card_lr(Card):
+
+    name = 'Card_lr'
+    action_list = [(0,-1),(0,1)]
+
+
+class Card_flr(Card):
+
+    name = 'Card_flr'
+    action_list = [(1,0),(0,-1),(0,1)]
+
+
+class Tiger(Card):
+
+    name = 'Tiger'
+    action_list = [(2,0),(-1,0)]
+
+
+class Dragon(Card):
+
+    name = 'Dragon'
+    action_list = [(1,2),(1,-2),(-1,-1),(-1,1)]
+
 
