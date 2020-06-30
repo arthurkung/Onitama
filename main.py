@@ -1,26 +1,33 @@
 from cards import *
 class Piece:
 
-    def __init__(self, owner):
-        self.owner = owner
-
-class Master(Piece):
+    def __init__(self, owner = None, orientation = None):
+        if orientation is not None:
+            self.orientation = orientation
+        elif owner is not None:
+            self.orientation = owner.orientation
+        else:
+            self.orientation = 0
 
     def __str__(self):
-        return 'M({})'.format(self.owner.name)
+        sign = {1:'+', -1:'-'}
+        return '{}({})'.format(self.shortname,sign[self.orientation])
 
+class Master(Piece):
+    shortname = 'M'
 class Pawn(Piece):
-
-     def __str__(self):
-        return 'P({})'.format(self.owner.name)
+    shortname = 'P'
 
 
 class Player:
 
-    def __init__(self, name, orientation):
+    def __init__(self, name, orientation, card_list = None):
         self.name = name
         self.orientation = orientation
-        self.card_list = []
+        if card_list is None:
+            self.card_list = []
+        else:
+            self.card_list = card_list.copy()
 
     def get_card(self, card):
         self.card_list.append(card)
@@ -32,15 +39,20 @@ class Player:
         for c in self.card_list:
             print(c)
 
+    def copy(self):
+        player_copy = Player(self.name, self.orientation, self.card_list)
+        return player_copy
+
+
 class Board:
     def __init__(self, size,l_player,r_player):
+        self.size = size
         self.piece_dict = {}
         self.board_range = [(x,y) for x in range(size) for y in range(size)]
         middle_loc = round(size/2)
         l_x = 0
         r_x = size - 1
-        l_player.win_loc = (r_x,middle_loc)
-        r_player.win_loc = (l_x,middle_loc)
+        self.win_loc = {1:(r_x,middle_loc), -1:(l_x,middle_loc)}
         for y in range(size):
             if y == middle_loc:
                 self.piece_dict[(r_x,y)]=Master(r_player)
@@ -48,6 +60,9 @@ class Board:
             else:
                 self.piece_dict[(l_x,y)]=Pawn(l_player)
                 self.piece_dict[(r_x,y)]=Pawn(r_player)
+
+    def set_board(self,piece_dict):
+        self.piece_dict = piece_dict.copy()
 
     def get_piece(self,loc):
         return self.piece_dict.get(loc,None)
@@ -74,12 +89,13 @@ class Board:
 
 class Game:
 
-    def __init__(self):
+    def __init__(self,size = 5):
+        self.size = size
         # set up players
         self.l_player = Player('L',1)
         self.r_player = Player('R',-1)
         # set up board
-        self.board = Board(5,self.l_player,self.r_player)
+        self.board = Board(size,self.l_player,self.r_player)
         #set up card
         self.distribute_cards({})
 
@@ -121,7 +137,7 @@ class Game:
         unit = self.board.get_piece(orig_loc)
         if unit is None:
             return 'no unit at location'
-        if unit.owner != player:
+        if unit.orientation != player.orientation:
             return 'unit does not belong to player'
         if self.board.check_out_of_range(target_loc):
             return 'target location is out of range'
@@ -151,18 +167,26 @@ class Game:
         return win
 
     def master_reached_win_loc(self,player):
-        winning_loc_unit = self.board.get_piece(player.win_loc)
+        winning_loc_unit = self.board.get_piece(self.board.win_loc[player.orientation])
         if isinstance(winning_loc_unit,Master):
-            if winning_loc_unit.owner == player:
+            if winning_loc_unit.orientation == player.orientation:
                 return True
         return False
 
     def master_is_alive(self,player):
         for piece in self.board.piece_dict.values():
-            if piece.owner==player and isinstance(piece,Master):
+            if piece.orientation==player.orientation and isinstance(piece,Master):
                 return True
         return False
 
+    def copy(self):
+        new_game_instance = Game(self.size)
+        # copy player and card list
+        new_game_instance.l_player = self.l_player.copy()
+        new_game_instance.r_player = self.r_player.copy()
+        # copy board and pieces
+        new_game_instance.board.set_board(self.board.piece_dict)
+        return new_game_instance
 
 
 a = Game()
@@ -171,10 +195,18 @@ r_player_card_list = [Lamb()]
 card_dict = {a.l_player:l_player_card_list,a.r_player:r_player_card_list}
 a.distribute_cards(card_dict)
 
+
 a.play_card(a.l_player,a.r_player,(0,2),'Crab',2)
 # print(a.board.piece_dict)
-a.board.display()
+# a.board.display()
 
 # a.r_player.show_cards()
 
-
+# copy
+b = a.copy()
+# b.board.display()
+b.play_card(b.r_player,b.l_player,(4,2),'Crab',2)
+# b.board.display()
+# a.board.display()
+# a.r_player.show_cards()
+b.r_player.show_cards()
