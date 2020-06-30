@@ -177,7 +177,7 @@ class Game:
     def copy(self):
         new_game_instance = Game(self.size)
         # copy player and card list
-        new_game_instance.players = {p.orientation:p.copy for p in self.players}
+        new_game_instance.players = {orientation:p.copy() for orientation,p in self.players.items()}
 
         # copy board and pieces
         new_game_instance.board.set_board(self.board.piece_dict)

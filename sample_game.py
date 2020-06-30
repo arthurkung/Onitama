@@ -9,15 +9,15 @@ a.distribute_cards(card_dict)
 
 
 a.play_card(a.players[1],a.players[-1],(0,2),'Crab',2)
-a.board.display()
+# a.board.display()
 
-# a.r_player.show_cards()
+# a.players[-1].show_cards()
 
 # copy
-# b = a.copy()
+b = a.copy()
 # b.board.display()
-# b.play_card(b.r_player,b.l_player,(4,2),'Crab',2)
+b.play_card(b.players[-1],b.players[1],(4,2),'Crab',2)
 # b.board.display()
 # a.board.display()
-# a.r_player.show_cards()
-# b.r_player.show_cards()
+# a.players[-1].show_cards()
+# b.players[-1].show_cards()
