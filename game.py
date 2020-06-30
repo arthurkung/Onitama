@@ -45,21 +45,19 @@ class Player:
 
 
 class Board:
-    def __init__(self, size,l_player,r_player):
+    def __init__(self, size,players):
         self.size = size
         self.piece_dict = {}
         self.board_range = [(x,y) for x in range(size) for y in range(size)]
         middle_loc = round(size/2)
-        l_x = 0
-        r_x = size - 1
-        self.win_loc = {1:(r_x,middle_loc), -1:(l_x,middle_loc)}
-        for y in range(size):
-            if y == middle_loc:
-                self.piece_dict[(r_x,y)]=Master(r_player)
-                self.piece_dict[(l_x,y)]=Master(l_player)
-            else:
-                self.piece_dict[(l_x,y)]=Pawn(l_player)
-                self.piece_dict[(r_x,y)]=Pawn(r_player)
+        starting_x_loc = {1:0,-1:size-1}
+        self.win_loc = {1:(size-1,middle_loc), -1:(0,middle_loc)}
+        for orientation,player in players.items():
+            for y in range(size):
+                if y == middle_loc:
+                    self.piece_dict[(starting_x_loc[orientation],y)]=Master(player)
+                else:
+                    self.piece_dict[(starting_x_loc[orientation],y)]=Pawn(player)
 
     def set_board(self,piece_dict):
         self.piece_dict = piece_dict.copy()
@@ -92,10 +90,11 @@ class Game:
     def __init__(self,size = 5):
         self.size = size
         # set up players
-        self.l_player = Player('L',1)
-        self.r_player = Player('R',-1)
+        l_player = Player('L',1)
+        r_player = Player('R',-1)
+        self.players = {1:l_player, -1:r_player}
         # set up board
-        self.board = Board(size,self.l_player,self.r_player)
+        self.board = Board(size,self.players)
         #set up card
         self.distribute_cards({})
 
@@ -107,10 +106,6 @@ class Game:
 
 
     def play_card(self, player, player_opp, orig_loc, card_name, action):
-        '''Example:
-        c = Crab()
-        game1.play_card(game1.l_player,game1.r_player,[0,2],c,2)
-        '''
 
         dummy_card = Card(name = card_name)
         card_index = player.card_list.index(dummy_card)
@@ -182,8 +177,8 @@ class Game:
     def copy(self):
         new_game_instance = Game(self.size)
         # copy player and card list
-        new_game_instance.l_player = self.l_player.copy()
-        new_game_instance.r_player = self.r_player.copy()
+        new_game_instance.players = {p.orientation:p.copy for p in self.players}
+
         # copy board and pieces
         new_game_instance.board.set_board(self.board.piece_dict)
         return new_game_instance
