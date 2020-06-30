@@ -1,5 +1,5 @@
 from cards import *
-from game import *
+from cards import *
 
 a = Game()
 l_player_card_list = [Lamb(),Crab()]
@@ -9,7 +9,6 @@ a.distribute_cards(card_dict)
 
 
 a.play_card(a.l_player,a.r_player,(0,2),'Crab',2)
-# print(a.board.piece_dict)
 # a.board.display()
 
 # a.r_player.show_cards()
