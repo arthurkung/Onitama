@@ -4,11 +4,11 @@ class Card:
     name = 'empty card'
 
     def __init__(self,orientation=1, name = None, action_list = None):
-        self.set_orientation(orientation)
-        if not name is None:
-            self.name = name
-        if not action_list is None:
+        if action_list is not None:
             self.action_list = action_list
+        if name is not None:
+            self.name = name
+        self.set_orientation(orientation)
 
 
     def __eq__(self,other):
@@ -41,6 +41,9 @@ class Card:
         self.move = {i:x for i,x in enumerate(self.move_list,1)}
         return self.orientation
 
+    def copy(self):
+        card_copy = Card(self.orientation,  self.name, self.action_list)
+        return card_copy
 
 class Crab(Card):
 
