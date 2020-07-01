@@ -27,7 +27,7 @@ class Player:
         if card_list is None:
             self.card_list = []
         else:
-            self.card_list = card_list.copy()
+            self.card_list = [c.copy() for c in card_list]
 
     def get_card(self, card):
         self.card_list.append(card)
@@ -135,10 +135,10 @@ class Game:
         if unit.orientation != player.orientation:
             return 'unit does not belong to player'
         if self.board.check_out_of_range(target_loc):
-            return 'target location is out of range'
+            return 'target location {} is out of range'.format(target_loc)
         target = self.board.get_piece(target_loc)
         if target is not None:
-            if target.owner == player:
+            if target.orientation == player.orientation:
                 return 'target location occupied by friendly unit'
         return 1
 
